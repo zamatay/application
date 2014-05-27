@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/login_layout"
+    android:visibility="visible"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:id="@+id/login_logo_layout"
+        android:background="@drawable/bg_behind_logo"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+        <TextView
+            android:id="@+id/login_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/topMenuDelimiter"
+            android:text="ВКБ Задачи"/>
+    </RelativeLayout>
+    <ProgressBar
+        android:id="@+id/login_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_centerVertical="true"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+    <RelativeLayout
+        android:id="@+id/login_native_layout"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/login_logo_layout">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+            <LinearLayout
+                android:orientation="vertical"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_width="0.0px"
+                android:layout_height="0.0px" />
+            <EditText
+                android:id="@+id/login"
+                android:layout_width="200.0dip"
+                android:layout_height="45.0dip"
+                android:layout_marginBottom="5.0dip"
+                android:hint="@string/login"
+                style="@style/edit_text" />
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="200.0dip"
+                android:layout_height="45.0dip"
+                android:hint="@string/pass"
+                android:password="true"
+                android:imeOptions="actionDone"
+                style="@style/edit_text" />
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingLeft="0.0dip"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10.0dip">
+                <Button
+                    android:id="@+id/sign_in_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Войти"
+                    style="@style/button" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

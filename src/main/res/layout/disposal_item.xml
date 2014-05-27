@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/WHITE"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            style="@style/bold_text"
+            android:text="@string/number_label"
+            android:id="@+id/number_label"
+            android:layout_alignParentStart="true"
+            />
+
+        <TextView
+            android:text="10"
+            android:id="@+id/number_value"
+            style="@style/bold_text" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/bold_text"
+            android:text="@string/receiver_label"
+            android:id="@+id/receiver_label"/>
+
+        <TextView
+            style="@style/text"
+            android:text="150"
+            android:id="@+id/receiver_value"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/bold_text"
+            android:text="@string/sender_label"
+            android:id="@+id/sender_label"/>
+
+        <TextView
+            style="@style/text"
+            android:text="150"
+            android:id="@+id/sender_value"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            style="@style/text"
+            android:text="@string/them"
+            android:id="@+id/theme"
+            android:layout_alignParentStart="true"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/text"
+            android:text="Задание"
+            android:id="@+id/task" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:id="@+id/comment"
+            android:text="@string/comment"
+            android:layout_alignParentLeft="true"
+            style="@style/button" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="@string/execute"
+            android:id="@+id/execute"
+            style="@style/button" />
+    </LinearLayout>
+
+
+</LinearLayout>

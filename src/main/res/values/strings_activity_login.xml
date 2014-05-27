@@ -1,0 +1,13 @@
+<resources>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_login">Имя пользователя</string>
+    <string name="prompt_password">Пароль</string>
+    <string name="action_sign_in">Войти</string>
+    <string name="action_sign_in_short">Авторизоваться</string>
+    <string name="error_invalid_login">Логин не корректен</string>
+    <string name="error_invalid_password">Не правильный пароль</string>
+    <string name="error_incorrect_password">Не правильный пароль</string>
+    <string name="error_field_required">Обязательное поле</string>
+</resources>

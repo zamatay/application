@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="BLACK">#FF000000</color>
+    <color name="WHITE">#FFFFFFFF</color>
+    <color name="RED">#FFFF0000</color>
+    <color name="BLUE">#FF0000FF</color>
+    <color name="GREEN">#ff00ff00</color>
+    <color name="topMenuDelimiter">#ff1d5187</color>
+
+</resources>

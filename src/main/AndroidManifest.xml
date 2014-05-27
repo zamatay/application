@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ru.vkb.application" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
+    <!--
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    -->
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="ru.vkb.application.DisposalsActivity"
+            android:label="@string/disposals">
+            <!--android:launchMode="singleInstance" -->
+            <intent-filter>
+                <action android:name="ru.vkb.intent.action.SHOW_DISPOSALS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="ru.vkb.login.LoginActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="ru.vkb.application.DisposalInfoActivity"
+            android:label="@string/title_activity_disposal_detail"
+            android:theme="@android:style/Theme.Dialog" >
+            <intent-filter>
+                <action android:name="ru.vkb.intent.action.SHOW_DISPOSALS_INFO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="ru.vkb.application.DisposalNoteActivity"
+            android:label="@string/title_activity_disposal_comment" >
+            <intent-filter>
+                <action android:name="ru.vkb.intent.action.SHOW_DISPOSALS_COMMENT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name="ru.vkb.model.provider.RestProvider"
+            android:authorities="ru.vkb"
+            android:exported="false" />
+
+        <service
+            android:name="ru.vkb.model.service.RestService"
+            android:exported="false" />
+        <service
+            android:name="ru.vkb.model.service.notificationService"
+            android:exported="false" />
+
+        <receiver android:name="ru.vkb.model.receiver.NotificationAlarmReceiver" >
+            <intent-filter>
+                <action android:name="ru.vkb.model.service.CHECK_DISPOSAL" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="ru.vkb.application.preference.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
+    </application>
+
+</manifest>

@@ -1,0 +1,64 @@
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/SwipeRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/button_block">
+
+            <ListView
+                android:id="@+id/disposals_note_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </ListView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+
+    <RelativeLayout
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:id="@+id/button_block"
+        android:background="@drawable/bar_shadow_for_settings"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+        <ImageView
+            android:id="@+id/topmenu_rightDelim"
+            android:background="@color/topMenuDelimiter"
+            android:layout_width="1.0px"
+            android:layout_height="fill_parent"
+            android:layout_toLeftOf="@+id/topmenu_rightBtn"
+            android:layout_alignBottom="@+id/topmenu_rightBtn" />
+        <ImageView
+            android:id="@+id/topmenu_rightBtn"
+            android:background="@drawable/actionbar_without_shadow"
+            android:padding="5.0dip"
+            android:layout_width="@dimen/topmenu_height"
+            android:layout_height="56.0dip"
+            android:src="@drawable/btn_actionbar_letter"
+            android:scaleType="centerInside"
+            android:layout_alignParentRight="true" />
+        <EditText
+            android:id="@+id/comment_text"
+            android:textSize="15.0sp"
+            android:background="@drawable/field_text_edit_search"
+            android:paddingLeft="5.0dip"
+            android:focusableInTouchMode="true"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/write_comment"
+            android:layout_toLeftOf="@id/topmenu_rightDelim"
+            android:layout_alignTop="@id/topmenu_rightBtn"
+            android:layout_alignBottom="@id/topmenu_rightBtn"
+            android:layout_alignParentLeft="true"
+            android:inputType="textMultiLine"
+            android:imeOptions="flagNoExtractUi" />
+    </RelativeLayout>
+
+</RelativeLayout>

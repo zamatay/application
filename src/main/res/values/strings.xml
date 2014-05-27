@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="disposals">Задачи</string>
+    <string name="action_settings">Настройки</string>
+    <string name="UnknownError">Неопознаная ошибка</string>
+    <string name="ErrorData">Ошибка загрузки данных</string>
+    <string name="ConnectError">Ошибка подключения</string>
+    <string name="Welcome">Добро пожаловать</string>
+    <string name="number_label">Номер: </string>
+    <string name="sender_label">Отправитель: </string>
+    <string name="task">Текст задачи</string>
+    <string name="them">Тема</string>
+    <string name="app_name">ВКБ</string>
+    <string name="title_activity_disposal_detail">О Задаче</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="taskNumber">Задача номер:</string>
+    <string name="comment">Коментарии</string>
+    <string name="execute">Выполнить</string>
+    <string name="title_activity_disposal_comment">Переписка</string>
+    <string name="ok">ОК</string>
+    <string name="write_comment">Написать комментарий</string>
+    <string name="login">Логин</string>
+    <string name="pass">Пароль</string>
+    <string name="notification_downloading">загрузка</string>
+    <string name="notReadedTask">У Вас есть не прочитанные задачи</string>
+    <string name="receiver_label">Получатель: </string>
+    <string name="Settings">Настройки</string>
+    <string name="key_check_notification">notification_key</string>
+    <string name="key_notification_list">notification_list_key</string>
+    <string name="key_host">host_key</string>
+    <string name="key_login">login_key</string>
+    <string name="key_password">password_key</string>
+    <string name="checkRead">Проверить не прочитанные</string>
+    <string name="refresh">Обновить</string>
+
+</resources>
