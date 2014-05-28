@@ -18,6 +18,7 @@ public class Contract {
     }
 
     public interface PATH{
+        public static final String[] ALL = {"*"};
         public String _CONTENT_PATH();
         public Uri _CONTENT_URI();
         public String _CONTENT_TYPE();

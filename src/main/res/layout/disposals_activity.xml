@@ -55,13 +55,13 @@
                     android:paddingLeft="10dp"/>
 
                 <Button
-                    android:id="@+id/follow"
+                    android:id="@+id/refreshButton"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:textSize="14sp"
                     android:gravity="center_vertical|right"
                     android:paddingRight="10dp"
-                    android:paddingLeft="10dp"/>
+                    android:drawableLeft="@drawable/ic_navigation_refresh"/>
             </LinearLayout>
 
             <LinearLayout
@@ -70,7 +70,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:scaleType="fitStart"
-                android:src="@drawable/graphic" >
+                android:src="@drawable/graphic"
+                tools:ignore="Orientation">
             </LinearLayout>
 
         </LinearLayout>

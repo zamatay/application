@@ -13,6 +13,7 @@ public class RequestFactory {
     public static final int REQUEST_DISPOSAL_NOTE = 2;
     public static final int REQUEST_SEND_COMMENT = 3;
     public static final String method_name = "method";
+    public static String HOST;
     private static String mLogin;
     private static String mPassword;
     public static Integer StaffID;
@@ -27,9 +28,10 @@ public class RequestFactory {
         return request;
     }
 
-    public static Request getLogin(String login, String password) {
+    public static Request getLogin(String login, String password, String host) {
         mLogin = login;
         mPassword = password;
+        HOST = host;
         Request request = getRequest(REQUEST_LOGIN, null, "Login", true);
         return request;
     }

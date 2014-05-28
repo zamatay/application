@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/WHITE"
     android:weightSum="1">
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:id="@+id/_1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <TextView
             style="@style/bold_text"
@@ -25,8 +26,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:orientation="horizontal"
+        android:id="@+id/_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/_1">
 
         <TextView
             style="@style/bold_text"
@@ -41,9 +45,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/_2"
+        android:id="@+id/_3"
+        android:orientation="horizontal">
 
         <TextView
             style="@style/bold_text"
@@ -58,9 +64,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/_4"
+        android:layout_below="@id/_3"
+        android:orientation="horizontal">
         <TextView
             style="@style/text"
             android:text="@string/them"
@@ -70,9 +78,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/_5"
+        android:layout_below="@id/_4"
+        android:orientation="horizontal">
 
         <TextView
             style="@style/text"
@@ -80,24 +90,16 @@
             android:id="@+id/task" />
 
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:id="@+id/comment"
-            android:text="@string/comment"
-            android:layout_alignParentLeft="true"
-            style="@style/button" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:text="@string/execute"
-            android:id="@+id/execute"
-            style="@style/button" />
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/imageButton_context"
+        android:background="@drawable/actionbar_without_shadow"
+        android:layout_width="20.0dip"
+        android:layout_height="40.0dip"
+        android:layout_margin="5dp"
+        android:src="@drawable/abc_ic_menu_moreoverflow_normal_holo_dark"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true" />
 
 
-</LinearLayout>
+</RelativeLayout>

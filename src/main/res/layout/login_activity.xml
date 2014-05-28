@@ -50,20 +50,19 @@
                 android:layout_width="0.0px"
                 android:layout_height="0.0px" />
             <EditText
+                android:id="@+id/host"
+                android:hint="@string/host"
+                style="@style/edit_text.login" />
+            <EditText
                 android:id="@+id/login"
-                android:layout_width="200.0dip"
-                android:layout_height="45.0dip"
-                android:layout_marginBottom="5.0dip"
                 android:hint="@string/login"
-                style="@style/edit_text" />
+                style="@style/edit_text.login" />
             <EditText
                 android:id="@+id/password"
-                android:layout_width="200.0dip"
-                android:layout_height="45.0dip"
                 android:hint="@string/pass"
                 android:password="true"
                 android:imeOptions="actionDone"
-                style="@style/edit_text" />
+                style="@style/edit_text.login" />
             <LinearLayout
                 android:gravity="center"
                 android:orientation="horizontal"

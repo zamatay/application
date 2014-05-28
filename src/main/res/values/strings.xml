@@ -21,6 +21,7 @@
     <string name="ok">ОК</string>
     <string name="write_comment">Написать комментарий</string>
     <string name="login">Логин</string>
+    <string name="host">Хост</string>
     <string name="pass">Пароль</string>
     <string name="notification_downloading">загрузка</string>
     <string name="notReadedTask">У Вас есть не прочитанные задачи</string>

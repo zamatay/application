@@ -55,6 +55,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="ru.vkb.application.preference.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
 
         <provider
             android:name="ru.vkb.model.provider.RestProvider"
@@ -74,11 +78,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-        <activity
-            android:name="ru.vkb.application.preference.SettingsActivity"
-            android:label="@string/title_activity_settings" >
-        </activity>
     </application>
 
 </manifest>

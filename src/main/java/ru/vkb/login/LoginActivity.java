@@ -45,6 +45,7 @@ public class LoginActivity extends Activity{
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     // UI references.
+    private EditText mHost;
     private EditText mLogin;
     private EditText mPassword;
     private View mProgress;
@@ -59,10 +60,10 @@ public class LoginActivity extends Activity{
         //sp = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
         // Set up the login form.
         mLogin = (EditText) findViewById(R.id.login);
+        mHost = (EditText) findViewById(R.id.host);
 
-        //if (sp.contains("login"))
-        //    mLogin.setText(sp.getString("login", ""));
         mLogin.setText(PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.key_login), ""));
+        mHost.setText(PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.key_host), ""));
 
         mPassword = (EditText) findViewById(R.id.password);
         mPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -100,6 +101,7 @@ public class LoginActivity extends Activity{
         mPassword.setError(null);
 
         // Получаем данные в полях
+        final String host = mHost.getText().toString();
         final String login = mLogin.getText().toString();
         final String password = mPassword.getText().toString();
 
@@ -131,12 +133,12 @@ public class LoginActivity extends Activity{
         } else {
             // если все хорошо шлем запрос на подключение
             showProgress(true);
-            RestRequestManager.from(getApplicationContext()).execute(RequestFactory.getLogin(login, password), new RequestManager.RequestListener() {
+            RestRequestManager.from(getApplicationContext()).execute(RequestFactory.getLogin(login, password, host), new RequestManager.RequestListener() {
                 @Override
                 public void onRequestFinished(Request request, Bundle resultData) {
                     RequestFactory.StaffID = Integer.parseInt(resultData.getString("result"));
                     if (RequestFactory.StaffID > 0) {
-                        saveLoginAndPassword(login, password);
+                        saveLoginAndPassword(login, password, host);
                         // активити с списком задач
                         Intent intent = new Intent("ru.vkb.intent.action.SHOW_DISPOSALS");
                         startActivity(intent);
@@ -149,12 +151,13 @@ public class LoginActivity extends Activity{
                     showProgress(false);
                 }
 
-                private void saveLoginAndPassword(String login, String password) {
+                private void saveLoginAndPassword(String login, String password, String host) {
                     // запоминаем введеный логин
                     SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this).edit();
                     //SharedPreferences.Editor edit = sp.edit();
                     edit.putString(getString(R.string.key_login), login);
                     edit.putString(getString(R.string.key_password), password);
+                    edit.putString(getString(R.string.key_host), host);
                     edit.apply();
                 }
 

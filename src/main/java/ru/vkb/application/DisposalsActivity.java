@@ -8,12 +8,15 @@ import android.os.Bundle;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,7 +28,6 @@ import org.json.JSONException;
 
 import java.util.Arrays;
 
-import ru.vkb.application.preference.SettingsActivity;
 import ru.vkb.model.RestRequestManager;
 import ru.vkb.model.provider.Contract;
 import ru.vkb.model.service.notificationService;
@@ -60,6 +62,7 @@ public class DisposalsActivity extends BaseActivity {
     public void init() {
         super.init();
         disposalListView = (ListView) findViewById(R.id.disposalList);
+        registerForContextMenu(disposalListView);
 
         adapter =  new DisposalSimpleCursorAdapter(DisposalsActivity.this,R.layout.disposal_item,null,
                 new String[]{Contract.disposals.PROJECTION[Contract.disposals.number], Contract.disposals.PROJECTION[Contract.disposals.receiver],
@@ -134,9 +137,12 @@ public class DisposalsActivity extends BaseActivity {
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Loader<Cursor> result = new CursorLoader(getApplicationContext(), Contract.disposals.CONTENT_URI,Contract.disposals.PROJECTION,mSelection,mSelectionArg,null);
-        clearArgument();
-        return result;
+        return new CursorLoader(getApplicationContext(),
+                Contract.disposals.CONTENT_URI,
+                Contract.disposals.PROJECTION,
+                args.getString("Selection"),
+                args.getStringArray("SelectionArg"),
+                null);
     }
 
     private void clearArgument() {
@@ -145,10 +151,14 @@ public class DisposalsActivity extends BaseActivity {
     }
 
     public void refreshDisposals(){
+        Bundle arg = new Bundle();
+        arg.putString("Selection", mSelection);
+        arg.putStringArray("SelectionArg", mSelectionArg);
         if (getSupportLoaderManager().getLoader(Contract.disposals.PATH) == null)
-            getSupportLoaderManager().initLoader(Contract.disposals.PATH, null, this);
+            getSupportLoaderManager().initLoader(Contract.disposals.PATH, arg, this);
         else
-            getSupportLoaderManager().restartLoader(Contract.disposals.PATH, null, this);
+            getSupportLoaderManager().restartLoader(Contract.disposals.PATH, arg, this);
+        clearArgument();
     }
 
     @Override
@@ -197,11 +207,27 @@ public class DisposalsActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.a_main, menu);
         super.onCreateOptionsMenu(menu);
-        menu.add(0,R.id.action_refresh,0,getString(R.string.refresh));
-        menu.add(0, R.id.action_checkRead, 1, getString(R.string.checkRead));
+        getMenuInflater().inflate(R.menu.disposals, menu);
         return true;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.disposals_item, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        int id = adapter.getCursor().getInt(Contract.disposals.id);
+        switch (item.getItemId()){
+            case R.id.action_context_comment:
+                loadComments(id);
+            case R.id.action_context_execute:
+                requestExecTask(id);
+        }
+        return  true;
     }
 
     @Override
@@ -214,7 +240,6 @@ public class DisposalsActivity extends BaseActivity {
                 notificationService.startCheckDisposal(this);
                 return true;
             case R.id.action_refresh:
-                clearArgument();
                 refresh();
                 return true;
             default: return true;
@@ -231,11 +256,6 @@ public class DisposalsActivity extends BaseActivity {
         startRequest();
         RestRequestManager.from(this).execute(getRequestByParam(-1, "ExecuteDisposal", new String[]{"disposal_id"}, new String[]{id.toString()}), this);
     }
-
-    @Override
-    public void onRequestFinished(Request request, Bundle resultData) {
-        super.onRequestFinished(request, resultData);
-    }
 }
 
 class DisposalSimpleCursorAdapter extends SimpleCursorAdapter {
@@ -249,28 +269,18 @@ class DisposalSimpleCursorAdapter extends SimpleCursorAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = super.getView(position, convertView, parent);
-        Integer id = getCursor().getColumnIndex(Contract.disposals._ID);
 
-        Button button;
+        ImageView ib_context;
+        ib_context = (ImageView) v.findViewById(R.id.imageButton_context);
+        ib_context.setTag(parent);
 
-        button = (Button) v.findViewById(R.id.comment);
-        button.setTag(getCursor().getInt(id));
-        button.setOnClickListener(new View.OnClickListener() {
+        ib_context.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Button b = (Button) v.findViewById(R.id.comment);
-                mContext.loadComments((Integer) b.getTag());
+                ((ViewGroup) v.getTag()).showContextMenuForChild(v);
             }
         });
 
-        button = (Button) v.findViewById(R.id.execute);
-        button.setTag(getCursor().getInt(id));
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mContext.requestExecTask((Integer) v.getTag());
-            }
-        });
         int value = getCursor().getInt(Contract.disposals.readed);
         if (value == 0) {
             v.setBackgroundResource(GREEN);

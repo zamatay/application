@@ -15,8 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.foxykeep.datadroid.requestmanager.Request;
-
 import ru.vkb.common.utils;
 import ru.vkb.model.RequestFactory;
 import ru.vkb.model.RestRequestManager;
@@ -118,13 +116,5 @@ public class DisposalNoteActivity extends BaseActivity{
     protected void request() {
         super.request();
         requestDisposalsNote();
-    }
-
-    @Override
-    public void onRequestFinished(Request request, Bundle resultData) {
-        super.onRequestFinished(request, resultData);
-        /*if (request.getRequestType() == REQUEST_SEND_COMMENT){
-            request();
-        }*/
     }
 }

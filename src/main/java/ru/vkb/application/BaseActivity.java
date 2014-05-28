@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager;
@@ -24,6 +25,7 @@ import ru.vkb.common.messages;
  */
 public class BaseActivity extends ActionBarActivity  implements LoaderManager.LoaderCallbacks<Cursor>, RequestManager.RequestListener, View.OnClickListener{
     protected SwipeRefreshLayout swipeRefresh;
+    protected Button refreshButton;
     // датасет для отображения activity
     public SimpleCursorAdapter adapter;
 
@@ -38,6 +40,7 @@ public class BaseActivity extends ActionBarActivity  implements LoaderManager.Lo
         MenuItem mi = menu.add(0,1,10,getString(R.string.Settings));
         mi.setIntent(new Intent(this, SettingsActivity.class));
         return super.onCreateOptionsMenu(menu);
+
     }
 
     @Override
@@ -61,6 +64,16 @@ public class BaseActivity extends ActionBarActivity  implements LoaderManager.Lo
             }
         });
         swipeRefresh.setColorScheme(android.R.color.white, android.R.color.holo_blue_light, android.R.color.white, android.R.color.holo_blue_light);
+
+        refreshButton = (Button) findViewById(R.id.refreshButton);
+        if (refreshButton != null) {
+            refreshButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    refresh();
+                }
+            });
+        }
     }
 
     private void afterInit() {

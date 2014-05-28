@@ -27,7 +27,6 @@ import static com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 
 
 public class BaseOperations implements RequestService.Operation {
-    private String _url = "test1";
     //private String _url = "http://test3:8081";
     private String _extended = "/datasnap/rest/TSMethods/";
     protected Context mContext;
@@ -36,7 +35,7 @@ public class BaseOperations implements RequestService.Operation {
     protected String get_url(){
         String result = PreferenceManager.getDefaultSharedPreferences(mContext).getString("text_host", "");
         if (result.length() == 0)
-          return _url + _extended;
+          return RequestFactory.HOST + _extended;
         else
           return result + _extended;
     }

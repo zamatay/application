@@ -94,4 +94,14 @@ public class RestProvider extends ContentProvider{
         Log.d(TAG, "Update " + count.toString());
         return count;
     }
+
+    public Cursor fetchReceiverGroup() {
+        String query = "SELECT distinct receiver FROM disposals";
+        return mDatabaseHelper.getReadableDatabase().rawQuery(query, null);
+    }
+
+    public Cursor fetchReceiverChildren(String receiver) {
+        String query = "SELECT * FROM disposals WHERE receiver = '" + receiver + "'";
+        return mDatabaseHelper.getReadableDatabase().rawQuery(query, null);
+    }
 }
