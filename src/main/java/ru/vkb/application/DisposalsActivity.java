@@ -224,8 +224,10 @@ public class DisposalsActivity extends BaseActivity {
         switch (item.getItemId()){
             case R.id.action_context_comment:
                 loadComments(id);
+                return true;
             case R.id.action_context_execute:
                 requestExecTask(id);
+                return true;
         }
         return  true;
     }
@@ -272,12 +274,12 @@ class DisposalSimpleCursorAdapter extends SimpleCursorAdapter {
 
         ImageView ib_context;
         ib_context = (ImageView) v.findViewById(R.id.imageButton_context);
-        ib_context.setTag(parent);
 
         ib_context.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((ViewGroup) v.getTag()).showContextMenuForChild(v);
+                ViewGroup vg = (ViewGroup) v.getParent();
+                vg.showContextMenuForChild(v);
             }
         });
 
