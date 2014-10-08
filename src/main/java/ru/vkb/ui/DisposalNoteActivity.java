@@ -1,33 +1,34 @@
-package ru.vkb.application;
+package ru.vkb.ui;
 
 
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 
-import ru.vkb.common.utils;
+import com.foxykeep.datadroid.requestmanager.Request;
+
+import ru.vkb.task.R;
 import ru.vkb.model.RequestFactory;
 import ru.vkb.model.RestRequestManager;
 import ru.vkb.model.provider.Contract;
 
 import static ru.vkb.model.RequestFactory.REQUEST_SEND_COMMENT;
 import static ru.vkb.model.RequestFactory.getRequestByParam;
+import static ru.vkb.model.service.RequestListener.getRequestListener;
 
 
 public class DisposalNoteActivity extends BaseActivity{
 
     public Integer disposalID;
-    public ListView note_list;
+    //public ListView note_list;
     protected ImageView btn;
     protected EditText comment_text;
 
@@ -35,11 +36,11 @@ public class DisposalNoteActivity extends BaseActivity{
     public void init() {
         disposalID = getIntent().getIntExtra("disposal_id", -1);
         super.init();
-        note_list = (ListView) findViewById(R.id.disposals_note_list);
+        //note_list = (ListView) findViewById(R.id.disposals_note_list);
         adapter = new SimpleCursorAdapter(DisposalNoteActivity.this, R.layout.disposal_note_item,null,
-                new String[]{Contract.disposal_comment.dateCreate, Contract.disposal_comment.userName, Contract.disposal_comment.note_text},
+                new String[]{"dateCreate", "userName", "note_text"},
                 new int[]{R.id.disposal_note_date_create, R.id.disposal_note_user_name, R.id.disposal_note_text},0);
-        note_list.setAdapter(adapter);
+        swipeRefresh.setAdapter(adapter);
         btn = (ImageView) findViewById(R.id.topmenu_rightBtn);
         btn.setOnClickListener(this);
 
@@ -53,11 +54,11 @@ public class DisposalNoteActivity extends BaseActivity{
             // кнопка отправить комментарий
             if (comment_text.getText().toString() != "") {
                 // запускаем обновление UI
-                startRequest();
+                //startRequest();
                 String comment = comment_text.getText().toString();
-                comment = utils.Encoding(comment);
+                //comment = utils.Encoding(comment);
                 // отправляем на сервер коммент
-                RestRequestManager.from(this).execute(getRequestByParam(REQUEST_SEND_COMMENT, "SendComment", new String[]{"disposal_id", "comment"}, new String[]{disposalID.toString(), comment}), this);
+                RestRequestManager.from(this).execute(getRequestByParam(REQUEST_SEND_COMMENT, "SendComment", new String[]{"disposal_id", "comment"}, new String[]{disposalID.toString(), comment}), getRequestListener(DisposalNoteActivity.this));
                 // очищаем текст
                 comment_text.setText("");
                 // прячем клавиатуру
@@ -68,8 +69,8 @@ public class DisposalNoteActivity extends BaseActivity{
     }
 
     @Override
-    public void refresh() {
-        super.refresh();
+    public void refresh(Request request) {
+        super.refresh(request);
         refreshDisposalsNote();
     }
 
@@ -79,42 +80,38 @@ public class DisposalNoteActivity extends BaseActivity{
         setContentView(R.layout.disposal_note_activity);
     }
 
+    @Override
+    public Uri getUri() {
+        return Contract.URI_DISPOSALS_COMMENT;
+    }
 
     public void refreshDisposalsNote(){
-        if (getSupportLoaderManager().getLoader(Contract.disposal_comment.PATH) == null)
-            getSupportLoaderManager().initLoader(Contract.disposal_comment.PATH, null, this);
+        if (getSupportLoaderManager().getLoader(Contract.ContractFactory.DisposalsComment.getID()) == null)
+            getSupportLoaderManager().initLoader(Contract.ContractFactory.DisposalsComment.getID(), null, this);
         else
-            getSupportLoaderManager().restartLoader(Contract.disposal_comment.PATH, null, this);
+            getSupportLoaderManager().restartLoader(Contract.ContractFactory.DisposalsComment.getID(), null, this);
     }
 
-    public void requestDisposalsNote(){
-        RestRequestManager.from(this).execute(RequestFactory.getDisposalNote(disposalID), this);
+    public Request requestDisposalsNote(Integer code){
+        Request request = RequestFactory.getDisposalNote(disposalID);
+        RestRequestManager.from(this).execute(request, getRequestListener(this));
+        return request;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.disposal_comment, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         super.onCreateLoader(id, args);
-        return new CursorLoader(this, Contract.disposal_comment.CONTENT_URI,Contract.disposal_comment.PROJECTION,"disposal_id=?",new String[]{disposalID.toString()},null);
+        return new CursorLoader(
+                this,
+                Contract.URI_DISPOSALS_COMMENT,
+                Contract.ContractFactory.DisposalsComment.getColumnsName(),"disposal_id=?",
+                new String[]{disposalID.toString()},
+                "dateCreate desc");
     }
 
     @Override
-    protected void request() {
-        super.request();
-        requestDisposalsNote();
+    protected Request getInternalRequest(Integer code) {
+        return requestDisposalsNote(code);
     }
 }

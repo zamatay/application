@@ -1,10 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="ru.vkb.application.DisposalNoteActivity" >
+    tools:context="ru.vkb.ui.BaseActivity" >
     
-    <item android:id="@+id/action_settings"
+    <item android:id="@+id/action_Setting"
         android:title="@string/action_settings"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_request"
+        android:title="@string/request"
         android:orderInCategory="100"
         app:showAsAction="never" />
 </menu>

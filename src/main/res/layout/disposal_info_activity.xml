@@ -7,11 +7,36 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:theme="@android:style/Theme.Dialog"
-    tools:context="ru.vkb.application.DisposalInfoActivity">
+    tools:context="ru.vkb.ui.DisposalInfoActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/buttonLayout">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/disposal_text"/>
+    </ScrollView>
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/disposal_text"/>
-
+        android:layout_alignParentBottom="true"
+        android:weightSum="0"
+        android:id="@+id/buttonLayout">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/comment"
+            android:id="@+id/disposal_info_comment"
+            style="@style/button"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@string/execute"
+            android:id="@+id/disposal_info_execute"
+            style="@style/button"/>
+        </RelativeLayout>
 </RelativeLayout>

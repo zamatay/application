@@ -1,7 +1,6 @@
 package ru.vkb.model.provider;
 
 import android.content.ContentProvider;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -21,7 +20,7 @@ public class RestProvider extends ContentProvider{
     private static final String DB_NAME = DBNAME + ".db";
     private static final int DB_VERSION = 1;
 
-    private DatabaseHelper mDatabaseHelper;
+    public DatabaseHelper mDatabaseHelper;
 
     class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -32,10 +31,16 @@ public class RestProvider extends ContentProvider{
         @Override
         public void onCreate(SQLiteDatabase db) {
             String sql;
-            sql = Contract.disposals.getCreateTableSql();
+            // таблица задач
+            sql = Contract.ContractFactory.Disposals.getCreateTableSql();
             db.execSQL(sql);
 
-            sql = Contract.disposal_comment.getCreateTableSql();
+            // таблица коментариев
+            sql = Contract.ContractFactory.DisposalsComment.getCreateTableSql();
+            db.execSQL(sql);
+
+            // таблица пользователей
+            sql = Contract.ContractFactory.Staff.getCreateTableSql();
             db.execSQL(sql);
         }
 
@@ -53,55 +58,106 @@ public class RestProvider extends ContentProvider{
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        Contract.PATH contract = Contract.getContractByUri(uri);
-        String table_name = contract._CONTENT_PATH();
-        Cursor cursor = mDatabaseHelper.getReadableDatabase().query(table_name, projection, selection, selectionArgs, null, null, sortOrder);
-        cursor.setNotificationUri(getContext().getContentResolver(), contract._CONTENT_URI());
+        Cursor cursor;
+        switch (Contract.sUriMatcher.match(uri)){
+            case Contract.ID_DISPOSALS_GROUP:
+                cursor = fetchReceiverGroup(selection, selectionArgs);
+                break;
+            case Contract.ID_DISPOSALS_CHILD:
+                cursor = getDisposals(selection, selectionArgs);
+                break;
+            case Contract.ID_DISTINCT_STAFF:
+                cursor =  getStaffIDs();
+                break;
+            default:
+                cursor = mDatabaseHelper.getReadableDatabase().query(
+                        Contract.ContractFactory.getContractByUri(uri).getTableName(),
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+        }
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 
     @Override
     public String getType(Uri uri) {
-        return Contract.getContractByUri(uri)._CONTENT_TYPE();
+        //return Contract.getContractByUri(uri).CONTENT_TYPE();
+        return "vnd.android.cursor.dir/vnd.";
     }
 
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        Contract.PATH contract = Contract.getContractByUri(uri);
-        long identity = mDatabaseHelper.getWritableDatabase().insert(contract._CONTENT_PATH(), null, values);
-        Uri resultUri = ContentUris.withAppendedId(contract._CONTENT_URI(), identity);
-        getContext().getContentResolver().notifyChange(resultUri, null);
+        long identity = mDatabaseHelper.getWritableDatabase().insert(Contract.ContractFactory.getContractByUri(uri).getTableName(), null, values);
+        //Uri resultUri = ContentUris.withAppendedId(Contract.getContractByUri(uri).CONTENT_URI(), identity);
+        getContext().getContentResolver().notifyChange(uri, null);
         Log.d(TAG, "Identity " + identity);
         return Uri.withAppendedPath(uri, Long.toString(identity));
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        Contract.PATH contract = Contract.getContractByUri(uri);
-        Integer count = mDatabaseHelper.getWritableDatabase().delete(contract._CONTENT_PATH(), selection, selectionArgs);
+        Integer count = mDatabaseHelper.getWritableDatabase().delete(Contract.ContractFactory.getContractByUri(uri).getTableName(), selection, selectionArgs);
         if (count != 0)
-            getContext().getContentResolver().notifyChange(contract._CONTENT_URI(), null);
+            getContext().getContentResolver().notifyChange(uri, null);
         Log.d(TAG, "Deleted " + count.toString());
         return count;
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        Integer count = mDatabaseHelper.getWritableDatabase().update(Contract.getContractByUri(uri)._CONTENT_PATH(), values, selection, selectionArgs);
+        Integer count;
+        switch (Contract.sUriMatcher.match(uri)){
+            case Contract.ID_DISPOSALS_CHILD:
+                count = mDatabaseHelper.getWritableDatabase().update("disposals", values, selection, selectionArgs);
+                break;
+            default:
+                count = mDatabaseHelper.getWritableDatabase().update(Contract.ContractFactory.getContractByUri(uri).getTableName(), values, selection, selectionArgs);
+                break;
+        }
+
         if (count != 0)
             getContext().getContentResolver().notifyChange(uri, null);
+
         Log.d(TAG, "Update " + count.toString());
         return count;
     }
 
-    public Cursor fetchReceiverGroup() {
-        String query = "SELECT distinct receiver FROM disposals";
-        return mDatabaseHelper.getReadableDatabase().rawQuery(query, null);
+    public Cursor fetchReceiverGroup(String selection, String[] selectionArgs) {
+        StringBuilder sb = new StringBuilder("SELECT distinct [d].[receiver_id] _id, [s].[userName] " +
+                "FROM disposals d " +
+                "left join staff s on [s].[_id] = [d].[receiver_id]");
+
+        if (selection != null & selectionArgs != null) {
+            sb.append(" WHERE ");
+            sb.append("[d].");
+            sb.append(selection);
+        }
+
+        return mDatabaseHelper.getReadableDatabase().rawQuery(sb.toString(), selectionArgs);
     }
 
-    public Cursor fetchReceiverChildren(String receiver) {
-        String query = "SELECT * FROM disposals WHERE receiver = '" + receiver + "'";
+    public Cursor getDisposals(String selection, String[] selectionArgs){
+        StringBuilder query =
+        new StringBuilder("SELECT disposals._id, number, s.userName sender_id, theme, shortTask, task, readed, isExecute " +
+                "FROM disposals " +
+                "LEFT JOIN staff s on s._id = sender_id " +
+                "LEFT JOIN staff r on r._id = receiver_id ");
+        if (selection != null) {
+            query.append(" WHERE ");
+            query.append(selection);
+        }
+
+        return mDatabaseHelper.getReadableDatabase().rawQuery(query.toString(), selectionArgs);
+    }
+
+    public Cursor getStaffIDs(){
+        String query = "select id FROM (SELECT sender_id id FROM disposals UNION select receiver_id FROM disposals) a WHERE not exists (select _id from staff where _id = a.id)";
         return mDatabaseHelper.getReadableDatabase().rawQuery(query, null);
     }
 }

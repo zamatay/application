@@ -16,6 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 import ru.vkb.model.RequestFactory;
 import ru.vkb.model.provider.Contract;
 
@@ -28,6 +30,7 @@ import static com.foxykeep.datadroid.network.NetworkConnection.ConnectionResult;
 
 public class BaseOperations implements RequestService.Operation {
     //private String _url = "http://test3:8081";
+    //http://77.233.5.22/restServer/rest_Server.vkb/datasnap/rest/TSMethods/getFlats
     private String _extended = "/datasnap/rest/TSMethods/";
     protected Context mContext;
     protected Request mRequest;
@@ -117,7 +120,7 @@ public class BaseOperations implements RequestService.Operation {
         }
     }
 
-    protected ConnectionResult sendRequest(Request request){
+    protected String sendRequest(Request request) throws ConnectionException {
         // непосредственно сам запрос
         StringBuilder url = new StringBuilder(get_url());
         url.append(getMethod(request));
@@ -126,20 +129,22 @@ public class BaseOperations implements RequestService.Operation {
         //url.append();
         if (request.contains("login"))
             connection.setCredentials(new UsernamePasswordCredentials(request.getString("login"), request.getString("password")));
-        try {
-            return connection.execute();
-        } catch (ConnectionException e) {
-            e.printStackTrace();
-            return null;
+        if (request.contains("Pragma: dssession")){
+            HashMap<String, String> header = new HashMap<String, String>();
+            header.put("Pragma", "dssession=" + request.getString("Pragma: dssession"));
+            //header.put("Cookie", "IDHTTPSESSIONID=" + request.getString("Pragma: dssession"));
+            connection.setHeaderList(header);
         }
+        ConnectionResult result = connection.execute();
+        return result.body;
     }
 
     @Override
-    public Bundle execute(Context context, Request request) throws DataException{
+    public Bundle execute(Context context, Request request) throws DataException, ConnectionException {
         mContext = context;
         mRequest = request;
         // получаем результат запроса
-        ConnectionResult result = sendRequest(request);
+        String result = sendRequest(request);
 
         try {
             return getResult(getContentValues(result));
@@ -154,21 +159,25 @@ public class BaseOperations implements RequestService.Operation {
         // формируем ответ
         JSONArray data = object.getJSONArray("result");
         Bundle result = new Bundle();
-        result.putString("result", data.getString(0));
+        Object value = data.get(0);
+        result.putString("result", String.valueOf(value));
         return result;
     }
 
-    public JSONObject getContentValues(ConnectionResult сonnectionResult) throws JSONException, DataException {
-        JSONObject result = new JSONObject(сonnectionResult.body);
+    public JSONObject getContentValues(String сonnectionResult) throws JSONException, DataException {
+        JSONObject result = new JSONObject(сonnectionResult);
         return result;
     }
 
     protected Uri getContentUri() {
         switch (mRequest.getRequestType()) {
             case RequestFactory.REQUEST_DISPOSAL_LIST:
-                return Contract.disposals.CONTENT_URI;
+                return Contract.URI_DISPOSALS;
             case RequestFactory.REQUEST_DISPOSAL_NOTE:
-                return Contract.disposal_comment.CONTENT_URI;
+            case RequestFactory.REQUEST_SEND_COMMENT:
+                return Contract.URI_DISPOSALS_COMMENT;
+            case RequestFactory.REQUEST_STAFF:
+                return Contract.URI_STAFF;
         }
         return null;
 

@@ -3,15 +3,15 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="ru.vkb.application.preference.SettingsActivity$GeneralPreferenceFragment"
+        android:fragment="ru.vkb.ui.preference.SettingsActivity$GeneralPreferenceFragment"
         android:title="@string/pref_header_general" />
 
     <header
-        android:fragment="ru.vkb.application.preference.SettingsActivity$NotificationPreferenceFragment"
+        android:fragment="ru.vkb.ui.preference.SettingsActivity$NotificationPreferenceFragment"
         android:title="@string/pref_header_notifications" />
 
     <header
-        android:fragment="ru.vkb.application.preference.SettingsActivity$DataSyncPreferenceFragment"
+        android:fragment="ru.vkb.ui.preference.SettingsActivity$DataSyncPreferenceFragment"
         android:title="@string/pref_header_data_sync" />
 
 </preference-headers>

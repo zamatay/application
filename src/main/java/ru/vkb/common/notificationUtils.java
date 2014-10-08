@@ -12,8 +12,8 @@ import android.support.v4.app.TaskStackBuilder;
 
 import java.util.HashMap;
 
-import ru.vkb.application.DisposalsActivity;
-import ru.vkb.application.R;
+import ru.vkb.task.R;
+import ru.vkb.ui.DisposalsTreeActivity;
 
 /**
  * Created by Zamuraev_av on 16.04.2014.
@@ -58,11 +58,11 @@ public class notificationUtils {
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
 // Adds the back stack for the Intent (but not the Intent itself)
-        stackBuilder.addParentStack(DisposalsActivity.class);
+        stackBuilder.addParentStack(DisposalsTreeActivity.class);
 // Adds the Intent that starts the Activity to the top of the stack
         stackBuilder.addNextIntent(resultIntent);
 
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder nb = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_launcher) //иконка уведомления
                 .setAutoCancel(true) //уведомление закроется по клику на него

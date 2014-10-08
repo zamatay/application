@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/actionbar_without_shadow"
+    android:weightSum="1">
+
+    <TextView
+        style="@style/text_group"
+        android:text="150"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="30dp"
+        android:id="@+id/receiver_value"/>
+
+</LinearLayout>

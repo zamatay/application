@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="ru.vkb.ui.DisposalsActivity" >
+    
+    <item android:id="@+id/action_checkRead"
+        android:title="@string/checkRead"
+        android:orderInCategory="20"
+        android:icon="@drawable/ic_collections_new_label"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_refresh"
+        android:title="@string/refresh"
+        android:orderInCategory="10"
+        android:icon="@drawable/ic_navigation_refresh"
+        app:showAsAction="always" />
+</menu>

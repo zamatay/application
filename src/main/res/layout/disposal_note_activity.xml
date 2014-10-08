@@ -3,7 +3,7 @@
     android:layout_height="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <android.support.v4.widget.SwipeRefreshLayout
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/SwipeRefresh"
@@ -11,13 +11,13 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/button_block">
 
-            <ListView
+<!--            <ListView
                 android:id="@+id/disposals_note_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-            </ListView>
+            </ListView>-->
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </com.handmark.pulltorefresh.library.PullToRefreshListView>
 
 
     <RelativeLayout

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/WHITE"
-    android:layout_margin="10dp"
-    android:weightSum="1">
+    android:background="@android:color/holo_blue_bright"
+    android:weightSum="1"
+    tools:ignore="NewApi">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -15,7 +16,9 @@
         <TextView
             style="@style/bold_text"
             android:text="@string/number_label"
-            android:id="@+id/number_label"/>
+            android:id="@+id/number_label"
+            android:layout_alignParentStart="true"
+            />
 
         <TextView
             android:text="10"
@@ -24,30 +27,11 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
+  <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/_2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/_1">
-
-        <TextView
-            style="@style/bold_text"
-            android:text="@string/receiver_label"
-            android:id="@+id/receiver_label"/>
-
-        <TextView
-            style="@style/text"
-            android:text="150"
-            android:id="@+id/receiver_value"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/_2"
-        android:id="@+id/_3"
+        android:layout_below="@id/_1"
         android:orientation="horizontal">
 
         <TextView
@@ -57,8 +41,22 @@
 
         <TextView
             style="@style/text"
-            android:text="150"
+            android:text="Замураев Александр Вячеславович"
             android:id="@+id/sender_value"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/_3"
+        android:layout_below="@id/_2"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/text"
+            android:text="@string/them"
+            android:id="@+id/theme"
+            android:layout_alignParentStart="true"/>
 
     </LinearLayout>
 
@@ -67,19 +65,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/_4"
         android:layout_below="@id/_3"
-        android:orientation="horizontal">
-        <TextView
-            style="@style/text"
-            android:text="@string/them"
-            android:id="@+id/theme"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/_5"
-        android:layout_below="@id/_4"
         android:orientation="horizontal">
 
         <TextView
@@ -90,12 +75,12 @@
     </LinearLayout>
 
     <ImageView
+        android:background="@android:color/transparent"
         android:id="@+id/imageButton_context"
-        android:background="@drawable/actionbar_without_shadow"
         android:layout_width="30.0dip"
         android:layout_height="40.0dip"
         android:layout_margin="5dp"
-        android:src="@drawable/abc_ic_menu_moreoverflow_normal_holo_dark"
+        android:src="@drawable/ic_menu_moreoverflow"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true" />
 

@@ -1,5 +1,7 @@
 package ru.vkb.common;
 
+import android.database.Cursor;
+
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 
@@ -33,5 +35,15 @@ public class utils {
         }
         result.append("\"");
         return result.toString();
+    }
+
+    public static String[] cursorToArray(Cursor data, Integer columnIndex){
+        String[] result = new String[data.getCount()];
+        data.move(-1);
+        for (int i = 0; i<data.getCount(); i++){
+            data.moveToPosition(i);
+            result[i] = data.getString(columnIndex);
+        }
+        return result;
     }
 }

@@ -7,7 +7,6 @@ import android.content.OperationApplicationException;
 import android.os.RemoteException;
 
 import com.foxykeep.datadroid.exception.DataException;
-import com.foxykeep.datadroid.network.NetworkConnection;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,6 +14,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import ru.vkb.model.RequestFactory;
 import ru.vkb.model.provider.Contract;
 
 /**
@@ -38,7 +38,7 @@ public class dbOperations extends BaseOperations {
     }
 
     @Override
-    public JSONObject getContentValues(NetworkConnection.ConnectionResult сonnectionResult) throws JSONException, DataException {
+    public JSONObject getContentValues(String сonnectionResult) throws JSONException, DataException {
         JSONObject result =  super.getContentValues(сonnectionResult);
         try {
             // данные
@@ -55,7 +55,9 @@ public class dbOperations extends BaseOperations {
                 for (int j = 0; j < column.length(); j++) {
                     if ("id".compareToIgnoreCase(column.getJSONObject(j).getString("Title")) == 0)
                         item.put("_ID", row.getString(j));
-                    else
+                    else if ("rownumber".compareToIgnoreCase(column.getJSONObject(j).getString("Title")) == 0){
+                        continue;
+                    } else
                         item.put(column.getJSONObject(j).getString("Title"), row.getString(j));
                 }
                 values[i] = item;
@@ -72,14 +74,8 @@ public class dbOperations extends BaseOperations {
 
     public void insertValues(Context context, ContentValues[] values){
         // список комманд
-        ArrayList<ContentProviderOperation> list = new ArrayList<ContentProviderOperation>();
-        // комманда на удаление, если есть флаг не удалять то не удаляем
-        if (!mRequest.getBoolean("notDeleted") & !mRequest.getBoolean("resync"))
-            list.add(ContentProviderOperation.newDelete(getContentUri()).build());
-        if (mRequest.contains("resync") & mRequest.getBoolean("resync") & values.length > 0) {
-            initArgs(values);
-            list.add(ContentProviderOperation.newDelete(getContentUri()).withSelection(selection, selectionArgs).build());
-        }
+            ArrayList<ContentProviderOperation> list = getPrepareCommand(values);
+
         // добавляем комманды на вставку
         for (int i = 0; i < values.length; i++){
             list.add(ContentProviderOperation.newInsert(getContentUri()).withValues(values[i]).build());
@@ -92,8 +88,18 @@ public class dbOperations extends BaseOperations {
         } catch (OperationApplicationException e) {
             e.printStackTrace();
         }
-        //context.getContentResolver().delete(getContentUri(request), null, null);
-        //context.getContentResolver().bulkInsert(getContentUri(request), values);
+    }
+
+    protected ArrayList<ContentProviderOperation> getPrepareCommand(ContentValues[] values) {
+        ArrayList<ContentProviderOperation> list = new ArrayList<ContentProviderOperation>();
+        // комманда на удаление, если есть флаг не удалять или resync то не удаляем
+        if (!RequestFactory.isNotDeleteFlag(mRequest) & !RequestFactory.isResyncFlag(mRequest))
+            list.add(ContentProviderOperation.newDelete(getContentUri()).build());
+        if (RequestFactory.isResyncFlag(mRequest) & values.length > 0) {
+            initArgs(values);
+            list.add(ContentProviderOperation.newDelete(getContentUri()).withSelection(selection, selectionArgs).build());
+        }
+        return list;
     }
 
     private void initArgs(ContentValues[] values) {

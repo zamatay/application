@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ru.vkb.application" >
+    xmlns:tools="http://schemas.android.com/tools"
+    package="ru.vkb.task"
+
+    >
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <!--
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
@@ -12,23 +15,18 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     -->
+    <!--android:debuggable="false"
+            tools:ignore="HardcodedDebugMode"-->
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        >
+
         <activity
-            android:name="ru.vkb.application.DisposalsActivity"
-            android:label="@string/disposals">
-            <!--android:launchMode="singleInstance" -->
-            <intent-filter>
-                <action android:name="ru.vkb.intent.action.SHOW_DISPOSALS" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="ru.vkb.login.LoginActivity"
+            android:name="ru.vkb.ui.login.LoginActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,7 +35,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="ru.vkb.application.DisposalInfoActivity"
+            android:name="ru.vkb.ui.DisposalInfoActivity"
             android:label="@string/title_activity_disposal_detail"
             android:theme="@android:style/Theme.Dialog" >
             <intent-filter>
@@ -47,7 +45,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="ru.vkb.application.DisposalNoteActivity"
+            android:name="ru.vkb.ui.DisposalNoteActivity"
             android:label="@string/title_activity_disposal_comment" >
             <intent-filter>
                 <action android:name="ru.vkb.intent.action.SHOW_DISPOSALS_COMMENT" />
@@ -56,7 +54,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="ru.vkb.application.preference.SettingsActivity"
+            android:name="ru.vkb.ui.preference.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
 
@@ -78,6 +76,16 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name="ru.vkb.ui.DisposalsTreeActivity"
+            android:label="@string/disposals" >
+            <intent-filter>
+                <action android:name="ru.vkb.intent.action.SHOW_DISPOSALS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

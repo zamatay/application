@@ -4,7 +4,6 @@ import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,12 +17,11 @@ import com.foxykeep.datadroid.requestmanager.RequestManager;
 
 import org.json.JSONArray;
 
-import ru.vkb.application.R;
 import ru.vkb.common.notificationUtils;
 import ru.vkb.model.RestRequestManager;
 import ru.vkb.model.operations.dbOperations;
-import ru.vkb.model.provider.Contract;
 import ru.vkb.model.receiver.NotificationAlarmReceiver;
+import ru.vkb.task.R;
 
 import static ru.vkb.model.RequestFactory.getRequestByParam;
 
@@ -38,8 +36,6 @@ public class notificationService extends Service {
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static AlarmManager alarms;
     private static PendingIntent alarmIntent;
-    private static String login;
-    private static String password;
     private static Boolean autoUpdate;
     private static int updateFreq;
     private int NotifyID = -1;
@@ -52,12 +48,16 @@ public class notificationService extends Service {
 
         Intent intentToFire = new Intent(NotificationAlarmReceiver.ACTION_CHECK_DISPOSALS_ALARM);
         alarmIntent = PendingIntent.getBroadcast(this, 0, intentToFire, 0);
+        loadParams();
+    }
 
+    private void loadParams() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        login = prefs.getString(getString(R.string.key_login), "");
-        password = prefs.getString(getString(R.string.key_password), "");
         autoUpdate = prefs.getBoolean(getString(R.string.key_check_notification), true);
         updateFreq = Integer.parseInt(prefs.getString(getString(R.string.key_notification_list), "1"));
+        if (updateFreq <= 0){
+            autoUpdate = false;
+        }
     }
 
     public static void startCheckDisposal(Context context) {
@@ -77,18 +77,8 @@ public class notificationService extends Service {
                 if (ar[1].length()>0) {
                     // обновляем непрочитанные сообщения
                     String message = getString(R.string.notReadedTask) + " (" + ar[1].length() + ")";
-                    // оповещаем пользователя
-                    //if (NotifyID == -1)
-                    //    NotifyID = notificationUtils.getInstance(notificationService.this).createInfoNotification(message, ar[1].toString(), "ru.vkb.intent.action.SHOW_DISPOSALS");
-                    //else
-                        notificationUtils.getInstance(notificationService.this).createInfoNotification(message, NotifyID, ar[1].toString(), "ru.vkb.intent.action.SHOW_DISPOSALS");
+                    notificationUtils.getInstance(notificationService.this).createInfoNotification(message, NotifyID, ar[1].toString(), "ru.vkb.intent.action.SHOW_DISPOSALS");
                 }
-            }
-
-            private ContentValues getContentValues() {
-                ContentValues item = new ContentValues();
-                item.put(Contract.disposals.PROJECTION[Contract.disposals.readed], "1");
-                return item;
             }
 
             @Override
@@ -116,6 +106,7 @@ public class notificationService extends Service {
         checkDisposals();
         lastID = startId;
         alarms.cancel(alarmIntent);
+        loadParams();
         if (autoUpdate) {
             int alarmType = AlarmManager.ELAPSED_REALTIME_WAKEUP;
             long timeToRefresh = SystemClock.elapsedRealtime() + updateFreq * 60 * 1000;

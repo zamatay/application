@@ -16,9 +16,16 @@
         <item name="android:focusableInTouchMode">false</item>
     </style>
 
-    <style name="text" parent="text">
+    <style name="text">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="text_group" parent="text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">20.0sp</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
 
@@ -30,6 +37,7 @@
         <item name="android:textSize">16.0sp</item>
         <item name="android:textColor">#ff323232</item>
         <item name="android:textColorHint">#ffdcdcdc</item>
+        <item name="android:imeOptions">actionNext</item>
         <item name="android:buttonStyleToggle">@style/button</item>
         <item name="android:enabled">true</item>
         <item name="android:ellipsize">end</item>
@@ -39,9 +47,15 @@
     </style>
 
     <style name="edit_text.login">
-        <item name="android:layout_width">200.0dip</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">45.0dip</item>
-        <item name="android:layout_marginBottom">5.0dip</item>
+        <item name="android:layout_marginLeft">10.0dip</item>
+        <item name="android:layout_marginRight">10.0dip</item>
+    </style>
+
+    <style name="edit_text.login.password">
+        <item name="android:password">true</item>
+        <item name="android:hint">@string/pass</item>
     </style>
 
 </resources>

@@ -16,9 +16,9 @@ public class RestService extends RequestService {
     @Override
     public Operation getOperationForType(int requestType) {
         switch (requestType){
-            case -1:
-            case RequestFactory.REQUEST_LOGIN:
-            case RequestFactory.REQUEST_SEND_COMMENT: return new BaseOperations();
+            case RequestFactory.REQUEST_NO_ID:
+            case RequestFactory.REQUEST_LOGIN: return new BaseOperations();
+            case RequestFactory.REQUEST_SEND_COMMENT:
             case RequestFactory.REQUEST_DISPOSAL_NOTE: return new dbDisposalNotifyOperation();
             default: return new dbOperations();
         }

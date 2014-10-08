@@ -34,5 +34,12 @@
     <string name="key_password">password_key</string>
     <string name="checkRead">Проверить не прочитанные</string>
     <string name="refresh">Обновить</string>
+    <string name="request">Запросить данные</string>
+    <string name="title_activity_disposals_tree">DisposalsTreeActivity</string>
+    <string name="Enter">Вход</string>
+    <string name="Yes">Да</string>
+    <string name="No">нет</string>
+    <string name="Empty">Пусто</string>
+    <string name="needLogin">Необходимо перелогиниться</string>
 
 </resources>

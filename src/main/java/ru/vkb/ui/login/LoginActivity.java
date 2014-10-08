@@ -1,4 +1,4 @@
-package ru.vkb.login;
+package ru.vkb.ui.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager;
 
-import ru.vkb.application.R;
+import ru.vkb.task.R;
 import ru.vkb.common.messages;
 import ru.vkb.model.RequestFactory;
 import ru.vkb.model.RestRequestManager;
@@ -63,7 +63,7 @@ public class LoginActivity extends Activity{
         mHost = (EditText) findViewById(R.id.host);
 
         mLogin.setText(PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.key_login), ""));
-        mHost.setText(PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.key_host), ""));
+        mHost.setText(PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.key_host), "http://"));
 
         mPassword = (EditText) findViewById(R.id.password);
         mPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -74,6 +74,7 @@ public class LoginActivity extends Activity{
                     return true;
                 }
                 return false;
+
             }
         });
 
@@ -87,6 +88,7 @@ public class LoginActivity extends Activity{
 
         mLoginFormView = findViewById(R.id.login_native_layout);
         mProgress = findViewById(R.id.login_progress);
+        RequestFactory.setSessionID(null);
     }
 
     /**
@@ -136,8 +138,12 @@ public class LoginActivity extends Activity{
             RestRequestManager.from(getApplicationContext()).execute(RequestFactory.getLogin(login, password, host), new RequestManager.RequestListener() {
                 @Override
                 public void onRequestFinished(Request request, Bundle resultData) {
-                    RequestFactory.StaffID = Integer.parseInt(resultData.getString("result"));
-                    if (RequestFactory.StaffID > 0) {
+                    String result = "false";
+                    if (resultData.containsKey("result")) {
+                        result = resultData.getString("result");
+                    }
+                    if (!result.equalsIgnoreCase("false")) {
+                        RequestFactory.setSessionID(result);
                         saveLoginAndPassword(login, password, host);
                         // активити с списком задач
                         Intent intent = new Intent("ru.vkb.intent.action.SHOW_DISPOSALS");
@@ -159,6 +165,7 @@ public class LoginActivity extends Activity{
                     edit.putString(getString(R.string.key_password), password);
                     edit.putString(getString(R.string.key_host), host);
                     edit.apply();
+                    RequestFactory.HOST = host;
                 }
 
                 @Override
